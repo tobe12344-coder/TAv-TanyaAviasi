@@ -217,9 +217,6 @@ export default function Home() {
               </Button>
             </form>
           </div>
-          <div className="text-center text-xs text-muted-foreground mt-2">
-              Mengobrol dengan: {TEXT_FILE_NAME}.
-          </div>
         </div>
       </footer>
     </div>
