@@ -18,6 +18,10 @@ const AnswerQuestionsFromTextInputSchema = z.object({
       "The text document content as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
   question: z.string().describe('The question to be answered based on the text content.'),
+  history: z.array(z.object({
+    role: z.enum(['user', 'bot']),
+    content: z.string(),
+  })).describe('The history of the conversation.'),
 });
 export type AnswerQuestionsFromTextInput = z.infer<typeof AnswerQuestionsFromTextInputSchema>;
 
@@ -34,12 +38,17 @@ const textInsightsPrompt = ai.definePrompt({
   name: 'textInsightsPrompt',
   input: {schema: AnswerQuestionsFromTextInputSchema},
   output: {schema: AnswerQuestionsFromTextOutputSchema},
-  prompt: `You are an AI assistant that answers questions based on the content of a text document.
+  prompt: `You are an AI assistant that answers questions based on the content of a text document. Your conversation should be continuous.
 
   Use the following text content to answer the question.
   Text Content: {{media url=textDataUri contentType='text/plain'}}
 
-  Question: {{{question}}}
+  Conversation History:
+  {{#each history}}
+  - {{role}}: {{content}}
+  {{/each}}
+
+  Current Question: {{{question}}}
 
   Answer:`,
 });

@@ -93,7 +93,8 @@ export default function Home() {
     }
 
     const userMessage: Message = { role: "user", content: values.question };
-    setMessages((prev) => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setIsLoading(true);
     form.reset();
 
@@ -101,6 +102,7 @@ export default function Home() {
       const result = await answerQuestionsFromText({
         textDataUri,
         question: values.question,
+        history: messages,
       });
       const botMessage: Message = { role: "bot", content: result.answer };
       setMessages((prev) => [...prev, botMessage]);
