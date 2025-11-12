@@ -12,6 +12,8 @@ import {
   RotateCcw,
   LogOut
 } from "lucide-react";
+import { useRouter } from 'next/navigation';
+
 
 import { answerQuestionsFromText } from "@/ai/flows/answer-questions-from-text";
 import { Button } from "@/components/ui/button";
@@ -23,6 +25,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { AuthProvider, useAuth } from '@/app/auth/auth-context';
+
 
 const formSchema = z.object({
   question: z.string().min(1, {
@@ -37,12 +41,15 @@ type Message = {
 
 const TEXT_FILE_PATH = "/documents/handbook.txt";
 
-export default function Home() {
+function ChatPage() {
   const [textDataUri, setTextDataUri] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { user, loading, signOut } = useAuth();
+  const router = useRouter();
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,6 +57,13 @@ export default function Home() {
       question: "",
     },
   });
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -129,6 +143,26 @@ export default function Home() {
     setMessages([]);
   };
 
+  const handleLogout = async () => {
+    await signOut();
+    router.push('/login');
+  };
+
+  if (loading || !user) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+            <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 rounded-full bg-blue-500 animate-bounce-1"></div>
+                <div className="w-4 h-4 rounded-full bg-green-500 animate-bounce-2"></div>
+                <div className="w-4 h-4 rounded-full bg-red-500 animate-bounce-3"></div>
+            </div>
+            <p className="text-muted-foreground">Mengarahkan ke halaman login...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-screen bg-background">
       <header className="flex items-center justify-between p-4 border-b">
@@ -190,7 +224,7 @@ export default function Home() {
                   <RotateCcw className="mr-2 h-4 w-4" />
                   <span>Reset Percakapan</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem disabled>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Logout</span>
                 </DropdownMenuItem>
@@ -219,3 +253,12 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+export default function Home() {
+  return (
+    <AuthProvider>
+      <ChatPage />
+    </AuthProvider>
+  );
+}
