@@ -10,6 +10,8 @@ import {
   Bot,
   User,
   Settings,
+  RotateCcw,
+  LogOut
 } from "lucide-react";
 
 import { answerQuestionsFromText } from "@/ai/flows/answer-questions-from-text";
@@ -17,6 +19,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const formSchema = z.object({
   question: z.string().min(1, {
@@ -124,6 +132,10 @@ export default function Home() {
     }
   }
 
+  const handleResetChat = () => {
+    setMessages([]);
+  };
+
   return (
     <div className="flex flex-col h-screen bg-background">
       <header className="flex items-center justify-between p-4 border-b">
@@ -174,10 +186,24 @@ export default function Home() {
       <footer className="p-4 bg-background">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <Settings className="h-5 w-5" />
-              <span className="sr-only">Pengaturan</span>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Settings className="h-5 w-5" />
+                  <span className="sr-only">Pengaturan</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem onClick={handleResetChat}>
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  <span>Reset Percakapan</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem disabled>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Logout</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <form onSubmit={form.handleSubmit(onSubmit)} className="relative flex-1">
               <Input
                 {...form.register("question")}
