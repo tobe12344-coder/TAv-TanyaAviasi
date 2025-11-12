@@ -140,7 +140,7 @@ export default function Home() {
             <span className="font-semibold text-lg">TAv-TanyaAviasi</span>
         </div>
         <div className="flex items-center">
-            <Image src="/pertamina-logo.svg" alt="Pertamina Logo" width={140} height={40} />
+            <Image src="/pertamina-logo.png" alt="Pertamina Logo" width={140} height={40} />
         </div>
       </header>
 
