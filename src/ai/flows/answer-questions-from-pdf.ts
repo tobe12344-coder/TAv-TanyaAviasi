@@ -37,7 +37,7 @@ const pdfInsightsPrompt = ai.definePrompt({
   prompt: `You are an AI assistant that answers questions based on the content of a PDF document.
 
   Use the following PDF content to answer the question.
-  PDF Content: {{media url=pdfDataUri}}
+  PDF Content: {{media url=pdfDataUri contentType='application/pdf'}}
 
   Question: {{{question}}}
 
