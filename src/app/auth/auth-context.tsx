@@ -47,32 +47,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // onAuthStateChanged adalah listener dari Firebase yang akan
     // terpanggil setiap kali status otentikasi pengguna berubah.
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        // Jika ada pengguna yang login, periksa apakah emailnya diizinkan
-        if (currentUser.email && ALLOWED_EMAILS.includes(currentUser.email)) {
-          setUser(currentUser);
-        } else {
-          // Jika tidak diizinkan, logout pengguna
-          signOut(auth);
-          setUser(null);
-          toast({
-            variant: "destructive",
-            title: "Akses Ditolak",
-            description: "Email Anda tidak terdaftar untuk mengakses aplikasi ini.",
-          });
-           if (router) router.push('/login');
-        }
-      } else {
-        // Jika tidak ada pengguna yang login
-        setUser(null);
-      }
+      setUser(currentUser);
       // Selesai memeriksa, set loading menjadi false
       setLoading(false);
     });
 
     // Unsubscribe dari listener saat komponen di-unmount
     return () => unsubscribe();
-  }, [router, toast]);
+  }, []);
 
   const signInWithGoogle = async () => {
     setLoading(true);
@@ -82,35 +64,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const resultUser = result.user;
       
       if (resultUser.email && ALLOWED_EMAILS.includes(resultUser.email)) {
-        setUser(resultUser);
+        // Pengguna diizinkan, onAuthStateChanged akan menangani setUser
+        // dan kita bisa arahkan ke halaman utama
         router.push('/');
       } else {
+        // Jika tidak diizinkan, tampilkan pesan dan logout
         toast({
             variant: "destructive",
             title: "Akses Ditolak",
             description: "Email Anda tidak terdaftar untuk mengakses aplikasi ini.",
         });
         await signOut(auth); // Langsung logout jika tidak diizinkan
-        setUser(null);
       }
-    } catch (error) {
-      console.error("Google Sign-In Error", error);
-       toast({
-            variant: "destructive",
-            title: "Login Gagal",
-            description: "Terjadi kesalahan saat mencoba login dengan Google.",
-        });
+    } catch (error: any) {
+        // Jangan tampilkan toast untuk error 'popup-closed-by-user'
+        if (error.code !== 'auth/popup-closed-by-user') {
+            console.error("Google Sign-In Error", error);
+            toast({
+                    variant: "destructive",
+                    title: "Login Gagal",
+                    description: "Terjadi kesalahan saat mencoba login dengan Google.",
+            });
+        }
     } finally {
-      // Walaupun error, onAuthStateChanged akan menangani loading state
+      // Set loading false setelah proses login selesai atau gagal
+      setLoading(false);
     }
   };
 
   const signOutUser = async () => {
-    setLoading(true);
     try {
       // Menggunakan signOut dari Firebase
       await signOut(auth);
-      setUser(null);
+      // onAuthStateChanged akan menangani setUser(null)
       router.push('/login');
     } catch (error) {
       console.error("Sign-Out Error", error);
@@ -119,8 +105,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             title: "Logout Gagal",
             description: "Terjadi kesalahan saat mencoba logout.",
         });
-    } finally {
-       // onAuthStateChanged akan menangani loading state
     }
   };
 
