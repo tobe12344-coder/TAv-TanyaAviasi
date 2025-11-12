@@ -8,8 +8,8 @@ body {
 
 @layer base {
   :root {
-    --background: 195 17% 95%; /* Light Grey #F0F4F5 */
-    --foreground: 222.2 47.4% 11.2%; /* Dark Blue-Grey */
+    --background: 210 20% 98%;
+    --foreground: 222.2 47.4% 11.2%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 47.4% 11.2%;
@@ -17,24 +17,24 @@ body {
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 47.4% 11.2%;
 
-    --primary: 191 25% 65%; /* Soft Blue #89B8C2 */
-    --primary-foreground: 222.2 47.4% 11.2%; /* Dark Blue-Grey for contrast */
+    --primary: 217 91% 60%;
+    --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
-    --muted-foreground: 210 40% 45.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 289 22% 63%; /* Pale Violet #B18CB8 */
-    --accent-foreground: 222.2 47.4% 11.2%; /* Dark Blue-Grey for contrast */
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 210 40% 89.8%;
-    --input: 210 40% 89.8%;
-    --ring: 191 25% 65%; /* Soft Blue */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 217 91% 60%;
 
     --radius: 0.75rem;
 
@@ -63,7 +63,7 @@ body {
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 191 25% 65%;
+    --primary: 217 91% 60%;
     --primary-foreground: 222.2 84% 4.9%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -72,15 +72,15 @@ body {
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 289 22% 63%;
-    --accent-foreground: 222.2 84% 4.9%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
     
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 191 25% 65%;
+    --ring: 217 91% 60%;
 
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;

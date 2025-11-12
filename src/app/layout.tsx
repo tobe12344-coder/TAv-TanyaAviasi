@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'PDF Insights AI',
-  description: 'AI-powered answers from your PDF documents.',
+  title: 'TAv-TanyaAviasi',
+  description: 'Tanya Aviasi, didukung oleh AI.',
 };
 
 export default function RootLayout({
