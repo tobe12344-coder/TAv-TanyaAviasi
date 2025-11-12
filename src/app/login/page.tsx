@@ -25,7 +25,7 @@ function LoginPageContent() {
   return (
     <div 
       className="flex h-screen w-full items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: "url('https://picsum.photos/seed/loginbg/1920/1080')" }}
+      style={{ backgroundImage: "url('/login-background.png')" }}
       data-ai-hint="aviation background"
     >
       <div className="flex flex-col items-center gap-6 rounded-xl bg-black/30 p-8 text-center text-white shadow-lg backdrop-blur-md">
