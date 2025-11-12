@@ -69,10 +69,6 @@ export default function Home() {
         const reader = new FileReader();
         reader.onload = (e) => {
           setTextDataUri(e.target?.result as string);
-          toast({
-            title: "Dokumen Siap",
-            description: `Anda sekarang dapat bertanya tentang ${TEXT_FILE_NAME}.`,
-          });
         };
         reader.onerror = () => {
           throw new Error("Gagal membaca file teks.");
