@@ -6,13 +6,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
-  Loader2,
   ArrowUp,
   Bot,
   User,
 } from "lucide-react";
 
-import { answerQuestionsFromPdf } from "@/ai/flows/answer-questions-from-pdf";
+import { answerQuestionsFromText } from "@/ai/flows/answer-questions-from-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -29,11 +28,11 @@ type Message = {
   content: string;
 };
 
-const PDF_FILE_PATH = "/documents/handbook.pdf";
-const PDF_FILE_NAME = "Buku Panduan";
+const TEXT_FILE_PATH = "/documents/handbook.txt";
+const TEXT_FILE_NAME = "Buku Panduan";
 
 export default function Home() {
-  const [pdfDataUri, setPdfDataUri] = useState<string | null>(null);
+  const [textDataUri, setTextDataUri] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -51,23 +50,23 @@ export default function Home() {
   }, [messages, isLoading]);
 
   useEffect(() => {
-    const loadPdf = async () => {
+    const loadText = async () => {
       try {
-        const response = await fetch(PDF_FILE_PATH);
+        const response = await fetch(TEXT_FILE_PATH);
         if (!response.ok) {
-          throw new Error("Gagal memuat PDF.");
+          throw new Error("Gagal memuat file teks.");
         }
         const blob = await response.blob();
         const reader = new FileReader();
         reader.onload = (e) => {
-          setPdfDataUri(e.target?.result as string);
+          setTextDataUri(e.target?.result as string);
           toast({
             title: "Dokumen Siap",
-            description: `Anda sekarang dapat bertanya tentang ${PDF_FILE_NAME}.`,
+            description: `Anda sekarang dapat bertanya tentang ${TEXT_FILE_NAME}.`,
           });
         };
         reader.onerror = () => {
-          throw new Error("Gagal membaca file PDF.");
+          throw new Error("Gagal membaca file teks.");
         };
         reader.readAsDataURL(blob);
       } catch (error) {
@@ -75,16 +74,16 @@ export default function Home() {
         toast({
           variant: "destructive",
           title: "Gagal Memuat Dokumen",
-          description: "Tidak dapat memuat file PDF. Pastikan file ada di public/documents/handbook.pdf",
+          description: "Tidak dapat memuat file teks. Pastikan file ada di public/documents/handbook.txt",
         });
       }
     };
-    loadPdf();
+    loadText();
   }, [toast]);
 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!pdfDataUri) {
+    if (!textDataUri) {
       toast({
         variant: "destructive",
         title: "Dokumen Belum Siap",
@@ -99,8 +98,8 @@ export default function Home() {
     form.reset();
 
     try {
-      const result = await answerQuestionsFromPdf({
-        pdfDataUri,
+      const result = await answerQuestionsFromText({
+        textDataUri,
         question: values.question,
       });
       const botMessage: Message = { role: "bot", content: result.answer };
@@ -174,9 +173,9 @@ export default function Home() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
             <Input
               {...form.register("question")}
-              placeholder={pdfDataUri ? `Tanya tentang ${PDF_FILE_NAME}...` : "Memuat dokumen..."}
+              placeholder={textDataUri ? `Tanya tentang ${TEXT_FILE_NAME}...` : "Memuat dokumen..."}
               className="pl-4 pr-12 py-6 rounded-full bg-card border-border"
-              disabled={!pdfDataUri || isLoading}
+              disabled={!textDataUri || isLoading}
             />
             <Button type="submit" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full" disabled={isLoading || !form.formState.isDirty}>
               <ArrowUp className="text-gray-600"/>
@@ -184,7 +183,7 @@ export default function Home() {
             </Button>
           </form>
           <div className="text-center text-xs text-muted-foreground mt-2">
-              Mengobrol dengan: {PDF_FILE_NAME}.
+              Mengobrol dengan: {TEXT_FILE_NAME}.
           </div>
         </div>
       </footer>
