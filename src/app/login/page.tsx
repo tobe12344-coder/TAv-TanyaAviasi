@@ -23,17 +23,24 @@ function LoginPageContent() {
   };
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-background">
-      <div className="flex flex-col items-center gap-8 text-center">
-        <div className="flex flex-col items-center gap-4">
-            <Image src="/tav-logo.png" alt="TAv Logo" width={80} height={80} />
-            <h1 className="text-3xl font-bold">TAv-TanyaAviasi</h1>
-            <p className="text-muted-foreground">Silakan login untuk melanjutkan.</p>
+    <div 
+      className="flex h-screen w-full items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: "url('https://picsum.photos/seed/loginbg/1920/1080')" }}
+      data-ai-hint="aviation background"
+    >
+      <div className="flex flex-col items-center gap-6 rounded-xl bg-black/30 p-8 text-center text-white shadow-lg backdrop-blur-md">
+        <div className="flex flex-col items-center gap-2">
+            <h1 className="text-4xl font-bold">Tanya Aviasi</h1>
+            <p className="text-lg">Silakan login menggunakan akun Google Anda.</p>
         </div>
-        <Button onClick={handleLogin} disabled={loading}>
+        <Button 
+          onClick={handleLogin} 
+          disabled={loading} 
+          className="w-full bg-blue-600 py-6 text-lg font-semibold hover:bg-blue-700"
+        >
           {loading ? 'Memeriksa...' : (
-            <div className="flex items-center gap-2">
-              <svg className="h-5 w-5" viewBox="0 0 24 24">
+            <div className="flex items-center gap-3">
+              <svg className="h-6 w-6" viewBox="0 0 24 24">
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                   fill="#4285F4"
@@ -56,9 +63,6 @@ function LoginPageContent() {
           )}
         </Button>
       </div>
-       <footer className="absolute bottom-4">
-          <Image src="/pertamina-logo.png" alt="Pertamina Logo" width={180} height={50} />
-      </footer>
     </div>
   );
 }
