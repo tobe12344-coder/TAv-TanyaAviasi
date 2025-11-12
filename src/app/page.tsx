@@ -9,6 +9,7 @@ import {
   ArrowUp,
   Bot,
   User,
+  Settings,
 } from "lucide-react";
 
 import { answerQuestionsFromText } from "@/ai/flows/answer-questions-from-text";
@@ -172,18 +173,24 @@ export default function Home() {
 
       <footer className="p-4 bg-background">
         <div className="container mx-auto max-w-3xl">
-          <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-            <Input
-              {...form.register("question")}
-              placeholder={textDataUri ? `Tanya tentang ${TEXT_FILE_NAME}...` : "Memuat dokumen..."}
-              className="pl-4 pr-12 py-6 rounded-full bg-card border-border"
-              disabled={!textDataUri || isLoading}
-            />
-            <Button type="submit" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full" disabled={isLoading || !form.formState.isDirty}>
-              <ArrowUp className="text-gray-600"/>
-              <span className="sr-only">Kirim</span>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <Settings className="h-5 w-5" />
+              <span className="sr-only">Pengaturan</span>
             </Button>
-          </form>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="relative flex-1">
+              <Input
+                {...form.register("question")}
+                placeholder={textDataUri ? `Tanya Aviasi...` : "Memuat dokumen..."}
+                className="pl-4 pr-12 py-6 rounded-full bg-card border-border"
+                disabled={!textDataUri || isLoading}
+              />
+              <Button type="submit" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full" disabled={isLoading || !form.formState.isDirty}>
+                <ArrowUp className="text-gray-600"/>
+                <span className="sr-only">Kirim</span>
+              </Button>
+            </form>
+          </div>
           <div className="text-center text-xs text-muted-foreground mt-2">
               Mengobrol dengan: {TEXT_FILE_NAME}.
           </div>
