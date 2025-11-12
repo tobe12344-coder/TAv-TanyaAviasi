@@ -6,14 +6,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
-  UploadCloud,
-  FileText,
   Loader2,
-  Send,
+  ArrowUp,
   Bot,
   User,
-  Settings,
-  ArrowUp,
 } from "lucide-react";
 
 import { answerQuestionsFromPdf } from "@/ai/flows/answer-questions-from-pdf";
@@ -33,13 +29,14 @@ type Message = {
   content: string;
 };
 
+const PDF_FILE_PATH = "/documents/handbook.pdf";
+const PDF_FILE_NAME = "Buku Panduan";
+
 export default function Home() {
   const [pdfDataUri, setPdfDataUri] = useState<string | null>(null);
-  const [fileName, setFileName] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -53,55 +50,45 @@ export default function Home() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && file.type === "application/pdf") {
-      setFileName(file.name);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPdfDataUri(e.target?.result as string);
-        setMessages([]);
-        form.reset();
-        toast({
-          title: "PDF Diunggah",
-          description: `${file.name} berhasil diunggah.`,
-        });
-      };
-      reader.onerror = () => {
+  useEffect(() => {
+    const loadPdf = async () => {
+      try {
+        const response = await fetch(PDF_FILE_PATH);
+        if (!response.ok) {
+          throw new Error("Gagal memuat PDF.");
+        }
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setPdfDataUri(e.target?.result as string);
+          toast({
+            title: "Dokumen Siap",
+            description: `Anda sekarang dapat bertanya tentang ${PDF_FILE_NAME}.`,
+          });
+        };
+        reader.onerror = () => {
+          throw new Error("Gagal membaca file PDF.");
+        };
+        reader.readAsDataURL(blob);
+      } catch (error) {
+        console.error(error);
         toast({
           variant: "destructive",
-          title: "File Error",
-          description: "There was an error reading the file.",
+          title: "Gagal Memuat Dokumen",
+          description: "Tidak dapat memuat file PDF. Pastikan file ada di public/documents/handbook.pdf",
         });
-        resetFile();
-      };
-      reader.readAsDataURL(file);
-    } else if (file) {
-      toast({
-        variant: "destructive",
-        title: "File Tidak Valid",
-        description: "Silakan unggah file PDF yang valid.",
-      });
-      resetFile();
-    }
-  };
+      }
+    };
+    loadPdf();
+  }, [toast]);
 
-  const resetFile = () => {
-    setPdfDataUri(null);
-    setFileName(null);
-    setMessages([]);
-    form.reset();
-    if(fileInputRef.current) {
-        fileInputRef.current.value = "";
-    }
-  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!pdfDataUri) {
       toast({
         variant: "destructive",
-        title: "Tidak ada PDF",
-        description: "Silakan unggah file PDF terlebih dahulu.",
+        title: "Dokumen Belum Siap",
+        description: "Harap tunggu dokumen dimuat sepenuhnya.",
       });
       return;
     }
@@ -185,25 +172,10 @@ export default function Home() {
       <footer className="p-4 bg-background">
         <div className="container mx-auto max-w-3xl">
           <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-            <label htmlFor="pdf-upload-button" className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer">
-              {pdfDataUri ? <FileText className="text-primary" /> : <UploadCloud className="text-muted-foreground"/>}
-            </label>
-            <Input
-              id="pdf-upload"
-              type="file"
-              accept="application/pdf"
-              ref={fileInputRef}
-              className="hidden"
-              onChange={handleFileChange}
-            />
-            <Button id="pdf-upload-button" type="button" variant="ghost" size="icon" className="absolute left-1 top-1/2 -translate-y-1/2" onClick={() => fileInputRef.current?.click()}>
-               <span className="sr-only">Upload PDF</span>
-            </Button>
-
             <Input
               {...form.register("question")}
-              placeholder={fileName ? `Tanya tentang ${fileName}...` : "Unggah PDF untuk memulai..."}
-              className="pl-12 pr-12 py-6 rounded-full bg-card border-border"
+              placeholder={pdfDataUri ? `Tanya tentang ${PDF_FILE_NAME}...` : "Memuat dokumen..."}
+              className="pl-4 pr-12 py-6 rounded-full bg-card border-border"
               disabled={!pdfDataUri || isLoading}
             />
             <Button type="submit" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full" disabled={isLoading || !form.formState.isDirty}>
@@ -211,11 +183,9 @@ export default function Home() {
               <span className="sr-only">Kirim</span>
             </Button>
           </form>
-          {fileName && (
-              <div className="text-center text-xs text-muted-foreground mt-2">
-                  Mengobrol dengan: {fileName}. <Button variant="link" size="sm" onClick={resetFile} className="p-0 h-auto text-xs">Ganti file</Button>
-              </div>
-          )}
+          <div className="text-center text-xs text-muted-foreground mt-2">
+              Mengobrol dengan: {PDF_FILE_NAME}.
+          </div>
         </div>
       </footer>
     </div>
