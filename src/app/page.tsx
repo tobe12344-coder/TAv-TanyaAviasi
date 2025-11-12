@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -25,7 +26,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { AuthProvider, useAuth } from '@/app/auth/auth-context';
+import { useAuth } from '@/app/auth/auth-context';
 
 
 const formSchema = z.object({
@@ -258,8 +259,6 @@ function ChatPage() {
 
 export default function Home() {
   return (
-    <AuthProvider>
-      <ChatPage />
-    </AuthProvider>
+    <ChatPage />
   );
 }
