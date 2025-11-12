@@ -18,7 +18,6 @@ import { answerQuestionsFromText } from "@/ai/flows/answer-questions-from-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,7 +37,6 @@ type Message = {
 };
 
 const TEXT_FILE_PATH = "/documents/handbook.txt";
-const TEXT_FILE_NAME = "Buku Panduan";
 
 export default function Home() {
   const [textDataUri, setTextDataUri] = useState<string | null>(null);
@@ -157,7 +155,7 @@ export default function Home() {
         <div className="w-full max-w-3xl space-y-4">
             {messages.map((msg, index) => (
                 <div key={index} className={`flex gap-3 my-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    {msg.role === 'bot' && <Bot className="h-6 w-6 text-primary flex-shrink-0" />}
+                    {msg.role === 'bot' && <Image src="/tav-logo.png" alt="TAv Logo" width={24} height={24} className="h-6 w-6 flex-shrink-0" />}
                     <div className={`p-3 rounded-lg max-w-lg ${msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                         <p className="whitespace-pre-wrap">{msg.content}</p>
                     </div>
@@ -166,12 +164,11 @@ export default function Home() {
             ))}
             {isLoading && (
               <div className="flex gap-3 my-4 justify-start">
-                  <Bot className="h-6 w-6 text-primary flex-shrink-0" />
-                  <div className="p-3 rounded-lg bg-muted">
-                    <div className="space-y-2">
-                      <Skeleton className="h-4 w-[250px]" />
-                      <Skeleton className="h-4 w-[200px]" />
-                    </div>
+                  <Image src="/tav-logo.png" alt="TAv Logo" width={24} height={24} className="h-6 w-6 flex-shrink-0" />
+                  <div className="p-3 rounded-lg bg-muted flex items-center space-x-1">
+                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-bounce-1"></div>
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-bounce-2"></div>
+                    <div className="w-2 h-2 rounded-full bg-red-500 animate-bounce-3"></div>
                   </div>
               </div>
             )}
