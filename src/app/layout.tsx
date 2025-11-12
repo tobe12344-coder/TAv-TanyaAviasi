@@ -25,6 +25,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
+        {/* Membungkus seluruh aplikasi dengan AuthProvider */}
         <AuthProvider>
           {children}
         </AuthProvider>

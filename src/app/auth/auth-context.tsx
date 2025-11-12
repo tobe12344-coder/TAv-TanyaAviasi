@@ -3,58 +3,30 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
+import { app } from '@/firebase/config'; // Mengimpor dari file konfigurasi baru
 import { useToast } from '@/hooks/use-toast';
 
-// --- Placeholder Data & Types ---
-// In a real Firebase app, this would come from `firebase/auth`
-type User = {
-  uid: string;
-  email: string | null;
-  displayName: string | null;
-};
+// --- Mendapatkan instance Auth dari Firebase ---
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
-// --- Whitelist ---
-// IMPORTANT: Add the emails of authorized users here.
+// --- Tipe User ---
+// Kita bisa menggunakan tipe User dari Firebase atau mendefinisikan tipe kita sendiri jika perlu.
+// Untuk saat ini, kita gunakan tipe yang sudah ada.
+type User = FirebaseUser;
+
+// --- Whitelist Email ---
+// PENTING: Tambahkan email pengguna yang diizinkan di sini.
 const ALLOWED_EMAILS = [
-  'user1@example.com',
-  'user2@example.com',
-  'admin@example.com' 
-  // TODO: Replace with actual authorized email addresses
+  'tobe12344@gmail.com',
+  'ghali.hutajulu@gmail.com',
+  'bayubas08@gmail.com'
+  // TODO: Ganti dengan alamat email resmi yang diizinkan
 ];
 
 
-// --- Mock Firebase Functions ---
-// These functions simulate the behavior of Firebase Auth.
-// We'll replace them with real Firebase calls later.
-
-const mockSignInWithGoogle = async (): Promise<User> => {
-  console.log("Simulating Google Sign-In...");
-  // In a real scenario, this would open a Google login popup.
-  // For this mock, we'll return a predefined user.
-  await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
-  const mockUser: User = {
-      uid: 'mock-uid-12345',
-      email: 'user1@example.com', // Simulate a whitelisted user
-      displayName: 'Mock User'
-  };
-  console.log("Simulated user:", mockUser.email);
-  return mockUser;
-};
-
-const mockSignOut = async () => {
-  console.log("Simulating Sign-Out...");
-  await new Promise(resolve => setTimeout(resolve, 500));
-};
-
-const mockOnAuthStateChanged = (callback: (user: User | null) => void): (() => void) => {
-  console.log("Simulating Auth State listener...");
-  // This function would typically be called by Firebase when the user's login state changes.
-  // We won't simulate this automatically for now. It will be triggered by sign-in/sign-out.
-  return () => { console.log("Unsubscribed from auth state changes."); }; // Return an unsubscribe function
-};
-
-
-// --- Auth Context ---
+// --- Konteks Otentikasi ---
 
 interface AuthContextType {
   user: User | null;
@@ -72,15 +44,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { toast } = useToast();
 
   useEffect(() => {
-    // In a real app, you might check for a stored session here.
-    // For now, we'll just start with no user.
-    setLoading(false);
-  }, []);
+    // onAuthStateChanged adalah listener dari Firebase yang akan
+    // terpanggil setiap kali status otentikasi pengguna berubah.
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        // Jika ada pengguna yang login, periksa apakah emailnya diizinkan
+        if (currentUser.email && ALLOWED_EMAILS.includes(currentUser.email)) {
+          setUser(currentUser);
+        } else {
+          // Jika tidak diizinkan, logout pengguna
+          signOut(auth);
+          setUser(null);
+          toast({
+            variant: "destructive",
+            title: "Akses Ditolak",
+            description: "Email Anda tidak terdaftar untuk mengakses aplikasi ini.",
+          });
+           if (router) router.push('/login');
+        }
+      } else {
+        // Jika tidak ada pengguna yang login
+        setUser(null);
+      }
+      // Selesai memeriksa, set loading menjadi false
+      setLoading(false);
+    });
+
+    // Unsubscribe dari listener saat komponen di-unmount
+    return () => unsubscribe();
+  }, [router, toast]);
 
   const signInWithGoogle = async () => {
     setLoading(true);
     try {
-      const resultUser = await mockSignInWithGoogle();
+      // Menggunakan signInWithPopup dari Firebase
+      const result = await signInWithPopup(auth, googleProvider);
+      const resultUser = result.user;
       
       if (resultUser.email && ALLOWED_EMAILS.includes(resultUser.email)) {
         setUser(resultUser);
@@ -91,7 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             title: "Akses Ditolak",
             description: "Email Anda tidak terdaftar untuk mengakses aplikasi ini.",
         });
-        await mockSignOut();
+        await signOut(auth); // Langsung logout jika tidak diizinkan
         setUser(null);
       }
     } catch (error) {
@@ -102,14 +101,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             description: "Terjadi kesalahan saat mencoba login dengan Google.",
         });
     } finally {
-      setLoading(false);
+      // Walaupun error, onAuthStateChanged akan menangani loading state
     }
   };
 
-  const signOut = async () => {
+  const signOutUser = async () => {
     setLoading(true);
     try {
-      await mockSignOut();
+      // Menggunakan signOut dari Firebase
+      await signOut(auth);
       setUser(null);
       router.push('/login');
     } catch (error) {
@@ -120,11 +120,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             description: "Terjadi kesalahan saat mencoba logout.",
         });
     } finally {
-      setLoading(false);
+       // onAuthStateChanged akan menangani loading state
     }
   };
 
-  const value = { user, loading, signInWithGoogle, signOut };
+  const value = { user, loading, signInWithGoogle, signOut: signOutUser };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -5,24 +5,21 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { AuthProvider, useAuth } from '@/app/auth/auth-context';
+import { useAuth } from '@/app/auth/auth-context';
 
 function LoginPageContent() {
   const { user, signInWithGoogle, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    // Jika sudah login, arahkan ke halaman utama
     if (user) {
       router.push('/');
     }
   }, [user, router]);
 
   const handleLogin = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      console.error("Login Gagal:", error);
-    }
+    await signInWithGoogle();
   };
 
   return (
@@ -34,7 +31,7 @@ function LoginPageContent() {
             <p className="text-muted-foreground">Silakan login untuk melanjutkan.</p>
         </div>
         <Button onClick={handleLogin} disabled={loading}>
-          {loading ? 'Memuat...' : (
+          {loading ? 'Memeriksa...' : (
             <div className="flex items-center gap-2">
               <svg className="h-5 w-5" viewBox="0 0 24 24">
                 <path
@@ -68,9 +65,8 @@ function LoginPageContent() {
 
 
 export default function LoginPage() {
+    // AuthProvider sudah ada di RootLayout, jadi tidak perlu di sini lagi.
     return (
-        <AuthProvider>
-            <LoginPageContent />
-        </AuthProvider>
+        <LoginPageContent />
     )
 }

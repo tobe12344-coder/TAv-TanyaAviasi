@@ -59,6 +59,7 @@ function ChatPage() {
   });
 
   useEffect(() => {
+    // Jika loading selesai dan tidak ada user, arahkan ke login
     if (!loading && !user) {
       router.push('/login');
     }
@@ -145,9 +146,9 @@ function ChatPage() {
 
   const handleLogout = async () => {
     await signOut();
-    router.push('/login');
   };
-
+  
+  // Menampilkan layar loading saat status otentikasi sedang diperiksa
   if (loading || !user) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
@@ -157,7 +158,7 @@ function ChatPage() {
                 <div className="w-4 h-4 rounded-full bg-green-500 animate-bounce-2"></div>
                 <div className="w-4 h-4 rounded-full bg-red-500 animate-bounce-3"></div>
             </div>
-            <p className="text-muted-foreground">Mengarahkan ke halaman login...</p>
+            <p className="text-muted-foreground">Memuat sesi...</p>
         </div>
       </div>
     );
@@ -241,10 +242,10 @@ function ChatPage() {
                 type="submit" 
                 variant="ghost" 
                 size="icon" 
-                className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-full ${form.formState.isDirty ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-200 hover:bg-gray-300'}`} 
-                disabled={isLoading || !form.formState.isDirty}
+                className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-full ${form.watch("question") ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-200 hover:bg-gray-300'}`} 
+                disabled={isLoading || !form.watch("question")}
               >
-                <ArrowUp className={form.formState.isDirty ? 'text-white' : 'text-gray-600'}/>
+                <ArrowUp className={form.watch("question") ? 'text-white' : 'text-gray-600'}/>
                 <span className="sr-only">Kirim</span>
               </Button>
             </form>
