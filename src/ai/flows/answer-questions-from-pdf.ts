@@ -15,7 +15,7 @@ const AnswerQuestionsFromPdfInputSchema = z.object({
   pdfDataUri: z
     .string()
     .describe(
-      'The PDF document content as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.' 
+      "The PDF document content as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
   question: z.string().describe('The question to be answered based on the PDF content.'),
 });
@@ -41,7 +41,7 @@ const pdfInsightsPrompt = ai.definePrompt({
 
   Question: {{{question}}}
 
-  Answer:`, 
+  Answer:`,
 });
 
 const answerQuestionsFromPdfFlow = ai.defineFlow(
