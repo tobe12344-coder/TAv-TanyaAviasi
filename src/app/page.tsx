@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
   ArrowUp,
-  Bot,
   User,
   Settings,
   RotateCcw,
@@ -105,7 +104,7 @@ export default function Home() {
       const result = await answerQuestionsFromText({
         textDataUri,
         question: values.question,
-        history: messages,
+        history: messages.map(m => ({ role: m.role, content: m.content })),
       });
       const botMessage: Message = { role: "bot", content: result.answer };
       setMessages((prev) => [...prev, botMessage]);
@@ -204,8 +203,14 @@ export default function Home() {
                 className="pl-4 pr-12 py-6 rounded-full bg-card border-border"
                 disabled={!textDataUri || isLoading}
               />
-              <Button type="submit" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full" disabled={isLoading || !form.formState.isDirty}>
-                <ArrowUp className="text-gray-600"/>
+              <Button 
+                type="submit" 
+                variant="ghost" 
+                size="icon" 
+                className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-full ${form.formState.isDirty ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-200 hover:bg-gray-300'}`} 
+                disabled={isLoading || !form.formState.isDirty}
+              >
+                <ArrowUp className={form.formState.isDirty ? 'text-white' : 'text-gray-600'}/>
                 <span className="sr-only">Kirim</span>
               </Button>
             </form>
@@ -214,4 +219,3 @@ export default function Home() {
       </footer>
     </div>
   );
-}
