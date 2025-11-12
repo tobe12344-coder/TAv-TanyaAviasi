@@ -140,7 +140,7 @@ export default function Home() {
     <div className="flex flex-col h-screen bg-background">
       <header className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center gap-2">
-            <Image src="/tav-logo.svg" alt="TAv Logo" width={40} height={40} />
+            <Image src="/tav-logo.png" alt="TAv Logo" width={40} height={40} />
             <span className="font-semibold text-lg">TAv-TanyaAviasi</span>
         </div>
         <div className="flex items-center">
