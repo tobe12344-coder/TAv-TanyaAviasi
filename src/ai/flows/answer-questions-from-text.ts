@@ -38,19 +38,19 @@ const textInsightsPrompt = ai.definePrompt({
   name: 'textInsightsPrompt',
   input: {schema: AnswerQuestionsFromTextInputSchema},
   output: {schema: AnswerQuestionsFromTextOutputSchema},
-  prompt: `You are an AI assistant that answers questions based on the content of a text document. Your conversation should be continuous.
+  prompt: `Anda adalah asisten AI yang menjawab pertanyaan berdasarkan konten dokumen teks. Percakapan Anda harus berkelanjutan. Selalu jawab dalam Bahasa Indonesia.
 
-  Use the following text content to answer the question.
-  Text Content: {{media url=textDataUri contentType='text/plain'}}
+  Gunakan konten teks berikut untuk menjawab pertanyaan.
+  Konten Teks: {{media url=textDataUri contentType='text/plain'}}
 
-  Conversation History:
+  Riwayat Percakapan:
   {{#each history}}
   - {{role}}: {{content}}
   {{/each}}
 
-  Current Question: {{{question}}}
+  Pertanyaan Saat Ini: {{{question}}}
 
-  Answer:`,
+  Jawaban:`,
 });
 
 const answerQuestionsFromTextFlow = ai.defineFlow(
