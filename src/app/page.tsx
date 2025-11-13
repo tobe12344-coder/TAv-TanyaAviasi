@@ -166,7 +166,7 @@ function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background bg-white/0 backdrop-blur-md ">
+    <div className="flex flex-col h-screen bg-background bg-white/0 backdrop-blur-md overflow-hidden">
       <header className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center gap-2">
             <Image src="/tav-logo.png" alt="TAv Logo" width={80} height={60} />
@@ -177,38 +177,38 @@ function ChatPage() {
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center p-4 overflow-y-auto">
-        {messages.length === 0 && !isLoading && (
-            <div className="text-center">
+      <main className="flex-1 flex flex-col items-center p-4 overflow-y-auto min-h-0">
+        {messages.length === 0 && !isLoading ? (
+            <div className="flex-1 flex flex-col items-center justify-center text-center">
                 <h1 className="text-5xl font-bold text-gray-800 mb-2">Halo, Perwira.</h1>
                 <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-green-500 text-transparent bg-clip-text">
                     Ada yang bisa dibantu?
                 </p>
             </div>
-        )}
-        
-        <div className="w-full max-w-3xl space-y-4">
-            {messages.map((msg, index) => (
-                <div key={index} className={`flex gap-3 my-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    {msg.role === 'bot' && <Image src="/tav-logo.png" alt="TAv Logo" width={24} height={24} className="h-6 w-6 flex-shrink-0" />}
-                    <div className={`p-3 rounded-lg max-w-lg ${msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                        <p className="whitespace-pre-wrap">{msg.content}</p>
+        ) : (
+            <div className="w-full max-w-3xl space-y-4">
+                {messages.map((msg, index) => (
+                    <div key={index} className={`flex gap-3 my-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                        {msg.role === 'bot' && <Image src="/tav-logo.png" alt="TAv Logo" width={24} height={24} className="h-6 w-6 flex-shrink-0" />}
+                        <div className={`p-3 rounded-lg max-w-lg ${msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
+                            <p className="whitespace-pre-wrap">{msg.content}</p>
+                        </div>
+                        {msg.role === 'user' && <User className="h-6 w-6 text-primary flex-shrink-0" />}
                     </div>
-                    {msg.role === 'user' && <User className="h-6 w-6 text-primary flex-shrink-0" />}
-                </div>
-            ))}
-            {isLoading && (
-              <div className="flex gap-3 my-4 justify-start">
-                  <Image src="/tav-logo.png" alt="TAv Logo" width={24} height={24} className="h-6 w-6 flex-shrink-0" />
-                  <div className="p-3 rounded-lg bg-muted flex items-center space-x-1">
-                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-bounce-1"></div>
-                    <div className="w-2 h-2 rounded-full bg-green-500 animate-bounce-2"></div>
-                    <div className="w-2 h-2 rounded-full bg-red-500 animate-bounce-3"></div>
+                ))}
+                {isLoading && (
+                  <div className="flex gap-3 my-4 justify-start">
+                      <Image src="/tav-logo.png" alt="TAv Logo" width={24} height={24} className="h-6 w-6 flex-shrink-0" />
+                      <div className="p-3 rounded-lg bg-muted flex items-center space-x-1">
+                        <div className="w-2 h-2 rounded-full bg-blue-500 animate-bounce-1"></div>
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-bounce-2"></div>
+                        <div className="w-2 h-2 rounded-full bg-red-500 animate-bounce-3"></div>
+                      </div>
                   </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-        </div>
+                )}
+                <div ref={messagesEndRef} />
+            </div>
+        )}
       </main>
 
       <footer className="p-4 bg-background">
