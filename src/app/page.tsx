@@ -166,8 +166,8 @@ function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background overflow-hidden">
-      <header className="flex items-center justify-between p-4 border-b bg-white/30 backdrop-blur-md">
+    <div className="flex flex-col h-screen bg-white/0 backdrop-blur-md overflow-hidden">
+      <header className="flex items-center justify-between p-4 border-b bg-white/0 backdrop-blur-md">
         <div className="flex items-center gap-2">
             <Image src="/tav-logo.png" alt="TAv Logo" width={80} height={60} />
             <span className="text-xl font-bold text-gray-800">TAv-TanyaAviasi</span>
@@ -211,7 +211,7 @@ function ChatPage() {
         )}
       </main>
 
-      <footer className="p-4 bg-background">
+      <footer className="p-4 bg-white/0 backdrop-blur-md">
         <div className="container mx-auto max-w-3xl">
           <div className="flex items-center gap-2">
             <DropdownMenu>
