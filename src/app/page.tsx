@@ -166,22 +166,22 @@ function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-screen bg-background bg-white/0 backdrop-blur-md ">
       <header className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center gap-2">
-            <Image src="/tav-logo.png" alt="TAv Logo" width={40} height={40} />
-            <span className="font-semibold text-lg">TAv-TanyaAviasi</span>
+            <Image src="/tav-logo.png" alt="TAv Logo" width={80} height={60} />
+            <span className="text-xl font-bold text-gray-800">TAv-TanyaAviasi</span>
         </div>
         <div className="flex items-center">
-            <Image src="/pertamina-logo.png" alt="Pertamina Logo" width={140} height={40} />
+            <Image src="/pertamina-logo.png" alt="Pertamina Logo" width={180} height={40} />
         </div>
       </header>
 
       <main className="flex-1 flex flex-col items-center justify-center p-4 overflow-y-auto">
         {messages.length === 0 && !isLoading && (
             <div className="text-center">
-                <h1 className="text-4xl font-bold">Halo, Perwira.</h1>
-                <p className="text-3xl text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500">
+                <h1 className="text-5xl font-bold text-gray-800 mb-2">Halo, Perwira.</h1>
+                <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-green-500 text-transparent bg-clip-text">
                     Ada yang bisa dibantu?
                 </p>
             </div>
