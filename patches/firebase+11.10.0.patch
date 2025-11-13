@@ -1,0 +1,28 @@
+diff --git a/node_modules/firebase/auth/dist/esm/index.esm.js b/node_modules/firebase/auth/dist/esm/index.esm.js
+index 9f3a532..443f733 100644
+--- a/node_modules/firebase/auth/dist/esm/index.esm.js
++++ b/node_modules/firebase/auth/dist/esm/index.esm.js
+@@ -1,4 +1,4 @@
+-export * from '@firebase/auth';
++export * from "@firebase/auth/dist/esm/index.js";
+ 
+ //# sourceMappingURL=index.esm.js.map
+diff --git a/node_modules/firebase/firestore/dist/esm/index.esm.js b/node_modules/firebase/firestore/dist/esm/index.esm.js
+index 725c8c9..7671191 100644
+--- a/node_modules/firebase/firestore/dist/esm/index.esm.js
++++ b/node_modules/firebase/firestore/dist/esm/index.esm.js
+@@ -1,4 +1,4 @@
+-export * from '@firebase/firestore';
++export * from "@firebase/firestore/dist/esm/index.js";
+ 
+ //# sourceMappingURL=index.esm.js.map
+diff --git a/node_modules/firebase/storage/dist/esm/index.esm.js b/node_modules/firebase/storage/dist/esm/index.esm.js
+index 3e83f3f..3b40d6c 100644
+--- a/node_modules/firebase/storage/dist/esm/index.esm.js
++++ b/node_modules/firebase/storage/dist/esm/index.esm.js
+@@ -1,4 +1,4 @@
+-export * from '@firebase/storage';
++export * from "@firebase/firestore/dist/esm/index.js";
+ 
+ //# sourceMappingURL=index.esm.js.map
+\ No newline at end of file

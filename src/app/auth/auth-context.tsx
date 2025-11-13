@@ -4,7 +4,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
-import { auth } from '@/firebase/config'; // Mengimpor dari file konfigurasi baru
+import { auth } from '@/firebase/config';
 import { useToast } from '@/hooks/use-toast';
 
 
