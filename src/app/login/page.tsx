@@ -28,7 +28,7 @@ function LoginPageContent() {
       style={{ backgroundImage: "url('/login-background.png')" }}
       data-ai-hint="aviation background"
     >
-      <div className="flex flex-col items-center gap-6 rounded-xl bg-black/30 p-8 text-center text-white shadow-lg backdrop-blur-md">
+      <div className="flex flex-col items-center gap-6 rounded-xl bg-black/0 p-8 backdrop-blur-md">
         <div className="flex flex-col items-center gap-2">
             <h1 className="text-4xl font-bold">Tanya Aviasi</h1>
             <p className="text-lg">Silakan login menggunakan akun Google Anda.</p>
