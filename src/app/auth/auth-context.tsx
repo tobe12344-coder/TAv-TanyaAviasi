@@ -3,12 +3,11 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { app } from '@/firebase/config'; // Mengimpor dari file konfigurasi baru
+import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
+import { auth } from '@/firebase/config'; // Mengimpor dari file konfigurasi baru
 import { useToast } from '@/hooks/use-toast';
 
-// --- Mendapatkan instance Auth dari Firebase ---
-const auth = getAuth(app);
+
 const googleProvider = new GoogleAuthProvider();
 
 // --- Tipe User ---
