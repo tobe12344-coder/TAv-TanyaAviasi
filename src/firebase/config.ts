@@ -14,6 +14,7 @@ const firebaseConfig = {
   appId: "1:49894771803:web:7f89ae68e2508ab113437e"
 };
 
+
 // Initialize Firebase
 // Mencegah inisialisasi ulang di Next.js
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
