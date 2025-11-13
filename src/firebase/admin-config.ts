@@ -10,9 +10,9 @@ const firebaseConfig = {
 
 // Mencegah inisialisasi ulang di Next.js
 if (!admin.apps.length) {
-    admin.initializeApp(firebaseConfig);
+    admin.initializeApp(firebaseConfig, 'admin');
 }
 
-export const adminApp = admin;
-export const adminAuth = admin.auth();
-export const adminDb = admin.firestore();
+export const adminApp = admin.app('admin');
+export const adminAuth = admin.auth(adminApp);
+export const adminDb = admin.firestore(adminApp);
